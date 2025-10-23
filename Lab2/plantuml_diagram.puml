@@ -1,4 +1,5 @@
-@startuml title Cinema Management System - Use Case Diagram
+@startuml Cinema System
+title Cinema Management System - Use Case Diagram
 left to right direction
 
 actor Customer
