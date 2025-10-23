@@ -1,0 +1,48 @@
+@startuml title Cinema Management System - Use Case Diagram
+left to right direction
+
+actor Customer
+actor Cashier
+actor Administrator
+actor "Payment System" as Payment
+
+Customer <|-- Cashier
+Cashier <|-- Administrator
+
+rectangle "Cinema System" {
+  usecase "View Session Schedule" as UC1
+  usecase "Select Seat" as UC2
+  usecase "Book Tickets" as UC3
+  usecase "Cancel Booking" as UC4
+  usecase "Save Customer Data" as UC5
+  usecase "Print Ticket" as UC6
+  usecase "Manage Movies" as UC7
+  usecase "Manage Sessions" as UC8
+  usecase "Manage Halls" as UC9
+  usecase "Manage Seats" as UC10
+  usecase "Process Payment" as UC11
+}
+
+Customer --> UC1
+Customer --> UC2
+
+Cashier --> UC3
+Cashier --> UC4
+Cashier --> UC5
+Cashier --> UC6
+Cashier --> UC2
+
+Administrator --> UC7
+Administrator --> UC8
+Administrator --> UC9
+Administrator --> UC10
+
+Payment --> UC11
+
+UC3 ..> UC5 : include
+UC3 ..> UC2 : include
+UC3 ..> UC11 : include
+UC4 ..> UC5 : include
+UC4 ..> UC11 : extend
+
+@enduml

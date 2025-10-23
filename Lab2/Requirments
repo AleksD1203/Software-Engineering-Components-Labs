@@ -1,0 +1,33 @@
+Use Cases:
+UC1 — View session schedule
+UC2 — Select seat
+UC3 — Book tickets
+UC4 — Cancel booking
+UC5 — Save customer data
+UC6 — Print ticket
+UC7 — Manage movies
+UC8 — Manage sessions
+UC9 — Manage halls
+UC10 — Manage seats
+UC11 — Process payment
+
+Functional Requirements:
+FR1 — Display movie sessions schedule
+FR2 — Show available seats selection
+FR3 — Create booking with customer data
+FR4 — Cancel existing booking
+FR5 — Store and update customer information
+FR6 — Generate printable tickets
+FR7 — Maintain movie catalog
+FR8 — Manage session timetables
+FR9 — Configure cinema halls
+FR10 — Manage seat arrangements
+FR11 — Process payment transactions
+
+Non-Functional Requirements:
+NFR1 — Data integrity through foreign keys (Customer→Booking→Ticket)
+NFR2 — Response time ≤ 3 seconds for booking operations
+NFR3 — Transaction consistency for payment processing
+NFR4 — System availability during cinema working hours
+NFR5 — Web interface compatibility for customers
+NFR6 — Secure payment gateway integration
