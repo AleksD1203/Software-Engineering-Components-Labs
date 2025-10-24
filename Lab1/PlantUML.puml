@@ -1,0 +1,72 @@
+@startuml Cinema_ER_Diagram
+
+!define TABLE(name,desc) entity name as "desc" << (T,#FFAAAA) >>
+!define PRIMARY_KEY(x) <u>x</u>
+!define FOREIGN_KEY(x) <i>x</i>
+
+entity "CUSTOMER" as customer {
+  PRIMARY_KEY(customer_id) : int
+  --
+  name : varchar(100)
+  email : varchar(100)
+  phone_number : varchar(15)
+}
+
+entity "BOOKING" as booking {
+  PRIMARY_KEY(booking_id) : int
+  --
+  FOREIGN_KEY(customer_id) : int
+  booking_date : Date
+  total_amount : Decimal(8,2)
+}
+
+entity "TICKET" as ticket {
+  PRIMARY_KEY(ticket_id) : int
+  --
+  FOREIGN_KEY(booking_id) : int
+  FOREIGN_KEY(session_id) : int
+  FOREIGN_KEY(seat_id) : int
+  price : Decimal(6,2)
+}
+
+entity "SESSION" as session {
+  PRIMARY_KEY(session_id) : int
+  --
+  FOREIGN_KEY(movie_id) : int
+  FOREIGN_KEY(hall_id) : int
+  session_time : Timestamp
+}
+
+entity "MOVIE" as movie {
+  PRIMARY_KEY(movie_id) : int
+  --
+  title : varchar(200)
+  release_date : Date
+  duration : int
+  genre : varchar(50)
+}
+
+entity "HALL" as hall {
+  PRIMARY_KEY(hall_id) : int
+  --
+  name : varchar(100)
+  total_seats : int
+}
+
+entity "SEAT" as seat {
+  PRIMARY_KEY(seat_id) : int
+  --
+  FOREIGN_KEY(hall_id) : int
+  row_number : varchar(5)
+  seat_number : int
+}
+
+customer ||--o{ booking : "books"
+booking ||--|{ ticket : "contains"
+movie ||--o{ session : "shows"
+hall ||--o{ session : "located in"
+hall ||--o{ seat : "has"
+session ||--o{ ticket : "for"
+seat ||--o{ ticket : "assigned to"
+
+@enduml
