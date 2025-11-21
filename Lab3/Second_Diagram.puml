@@ -1,0 +1,33 @@
+@startuml Cancel Booking
+title Cancel Booking - Sequence Diagram
+
+actor Customer
+actor "Payment System" as Payment
+participant "Cinema System" as Cinema
+participant "Booking" as Booking
+participant "Seat" as Seat
+participant "Ticket" as Ticket
+
+Customer -> Cinema: 1. cancelBooking(bookingId)
+Cinema -> Booking: 2. getBookingDetails(bookingId)
+Booking --> Cinema: 3. bookingDetails
+
+alt Cancellation allowed
+    Cinema -> Seat: 4. releaseSeat(booking.seatId, booking.sessionId)
+    Seat --> Cinema: 5. seatReleased
+    
+    Cinema -> Ticket: 6. invalidateTicket(booking.ticketId)
+    Ticket --> Cinema: 7. ticketInvalidated
+    
+    Cinema -> Booking: 8. updateBookingStatus(bookingId, "cancelled")
+    Booking --> Cinema: 9. bookingCancelled
+    
+    Cinema -> Payment: 10. processRefund(bookingId, refundAmount)
+    Payment --> Cinema: 11. refundProcessed
+    
+    Cinema --> Customer: 12. cancellationSuccess(bookingId, refundInfo)
+else Cancellation not allowed
+    Cinema --> Customer: 13. showError("Cancellation not allowed")
+end
+
+@enduml

@@ -1,0 +1,47 @@
+@startuml BookTickets
+
+title Book Tickets - Sequence Diagram
+
+actor Customer
+actor "Payment System" as Payment
+participant "Cinema System" as Cinema
+participant "Session" as Session
+participant "Hall" as Hall
+participant "Seat" as Seat
+participant "Booking" as Booking
+participant "Ticket" as Ticket
+
+Customer -> Cinema: 1. bookTickets(sessionId, seatId, customerData)
+Cinema -> Session: 2. getSession(sessionId)
+Session --> Cinema: 3. sessionDetails
+
+Cinema -> Hall: 4. getHallLayout(session.hallId)
+Hall --> Cinema: 5. hallLayout
+
+Cinema -> Seat: 6. reserveSeat(seatId, sessionId)
+Seat --> Cinema: 7. seatReserved
+
+Cinema -> Booking: 8. createBooking(customerId, sessionId, totalAmount)
+Booking --> Cinema: 9. bookingId
+
+alt Payment successful
+    Cinema -> Payment: 10. processPayment(bookingId, totalAmount)
+    Payment --> Cinema: 11. paymentSuccess
+    
+    Cinema -> Booking: 12. confirmBooking(bookingId)
+    Booking -> Ticket: 13. generateTicket(bookingId, sessionId, seatId)
+    Ticket --> Booking: 14. ticketGenerated
+    Booking --> Cinema: 15. bookingConfirmed
+    
+    Cinema --> Customer: 16. showSuccess(bookingId, ticketDetails)
+else Payment failed
+    Cinema -> Booking: 17. cancelBooking(bookingId)
+    Booking --> Cinema: 18. bookingCancelled
+    
+    Cinema -> Seat: 19. releaseSeat(seatId, sessionId)
+    Seat --> Cinema: 20. seatReleased
+    
+    Cinema --> Customer: 21. showError("Payment failed")
+end
+
+@enduml
