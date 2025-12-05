@@ -1,0 +1,109 @@
+@startuml Cinema_System
+
+title Деталізована Компонентна Діаграма: Система Кінотеатрів
+
+skinparam componentStyle uml2
+skinparam linetype ortho
+skinparam backgroundcolor white
+left to right direction
+
+skinparam component {
+BackgroundColor #FEFECE
+BorderColor #A80036
+ArrowColor #A80036
+}
+skinparam package {
+BackgroundColor #F3F3F3
+BorderColor #666666
+}
+
+component "Client App / UI" as Client
+
+package "Cinema System" as SystemBoundary {
+
+() "Public API (REST/gRPC)" as I_PublicAPI
+
+component "API Gateway" as Gateway {
+component "HTTP Router" as Http
+component "GRPC Server" as Grpc
+}
+
+Gateway -down- I_PublicAPI
+
+package "Modules Layer" {
+
+package "Booking Module" {
+    component "Controller" as BookC
+    component "Service" as BookS
+    component "Repository" as BookR
+    
+    BookC --> BookS
+    BookS --> BookR
+}
+
+package "Schedule Module" {
+    component "Controller" as SchedC
+    component "Service" as SchedS
+    component "Repository" as SchedR
+    
+    SchedC --> SchedS
+    SchedS --> SchedR
+}
+
+package "User/Auth Module" {
+    component "Controller" as AuthC
+    component "Service" as AuthS
+    component "Repository" as AuthR
+    
+    AuthC --> AuthS
+    AuthS --> AuthR
+}
+
+
+}
+
+component "DB Connection Pool" as Pool
+
+}
+
+database "PostgreSQL" as DB
+
+node "External Integrations" {
+component "Payment Provider" as Payment
+component "Notification Service" as Notify
+component "Customer / Admin" as UserActor
+}
+
+UserActor --> Client : Requests
+Client --> Gateway : Access Public API
+
+Gateway -up-|> I_PublicAPI : implements ' Реалізує
+I_PublicAPI <-left- Client : uses ' Клієнт використовує
+
+Http --> BookC
+Http --> SchedC
+Http --> AuthC
+
+Grpc --> BookC
+Grpc --> SchedC
+Grpc --> AuthC
+
+BookS .down.> SchedS : Session Data
+
+BookS .down.> AuthS : User Auth
+
+() "Payment API" as I_Payment
+Payment -r- I_Payment : provided
+BookS .up.> I_Payment : required
+
+() "Notification API" as I_Notification
+Notify -r- I_Notification : provided
+BookS .up.> I_Notification : required
+
+BookR --> Pool
+SchedR --> Pool
+AuthR --> Pool
+
+Pool --> DB
+
+@enduml

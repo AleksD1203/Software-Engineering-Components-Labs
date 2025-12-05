@@ -7,8 +7,8 @@ Repository for Software-Engineering-Components course labs
 - [x] **Lab1** - First laboratory work
 - [x] **Lab2** - Second laboratory work  
 - [x] **Lab3** - Third laboratory work
-- [ ] Lab4 - Fourth laboratory work
-- [ ] Lab5 - Fifth laboratory work
+- [x] **Lab4** - Fourth laboratory work
+- [x] **Lab5** - Fifth laboratory work
 
 ## 🗂️ Project Structure
 
